@@ -80,7 +80,6 @@
             @page { margin: 0; size: A4; }
         }
     </style>
-<link rel="stylesheet" href="/index.css">
 </head>
 <body>
     <div id="root"></div>
@@ -90,12 +89,13 @@
 
         // --- GÜNCEL AYARLAR ---
         const CONTACT_WHATSAPP = "905386793471"; 
-        const INSTAGRAM_LINK = "https://www.instagram.com/guide.ai.agents/"; 
+        
+        // DİKKAT: Aşağıdaki linki kendi Instagram adresinle değiştir.
+        // Örnek: "https://www.instagram.com/gaia.ai.tr/"
+        const INSTAGRAM_LINK = "https://www.instagram.com/gaia.ai.automation/"; 
         
         // GÜVENLİK GÜNCELLEMESİ: 
         // Şifre: "elam"
-        // Bu şifre basit bir matematiksel hash yöntemiyle gizlenmiştir.
-        // Bu sayede hem dosya olarak açıldığında hem de sunucuda çalışır.
         const ADMIN_HASH = "3115795"; 
 
         function App() {
@@ -182,14 +182,14 @@
             const [error, setError] = useState(false);
             const [loading, setLoading] = useState(false);
 
-            // Basit Hash Fonksiyonu (Web Crypto API yerine bunu kullanıyoruz ki file:// protokolünde de çalışsın)
+            // Basit Hash Fonksiyonu
             const simpleHash = (str) => {
                 let hash = 0;
                 if (str.length === 0) return hash.toString();
                 for (let i = 0; i < str.length; i++) {
                     const char = str.charCodeAt(i);
                     hash = ((hash << 5) - hash) + char;
-                    hash = hash & hash; // 32bit integer'a dönüştür
+                    hash = hash & hash;
                 }
                 return hash.toString();
             }
@@ -198,7 +198,6 @@
                 e.preventDefault();
                 setLoading(true);
                 
-                // Şifreyi kontrol et
                 // "elam" kelimesinin simpleHash çıktısı "3115795"tir.
                 const inputHash = simpleHash(pass);
                 
@@ -514,6 +513,5 @@ Hizmet Veren (İmza)                              Müşteri (İmza)
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
-<script type="module" src="/index.tsx"></script>
 </body>
 </html>
