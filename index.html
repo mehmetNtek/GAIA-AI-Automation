@@ -330,7 +330,6 @@
                 companyName: '',
                 address: '',
                 priceSetup: '10.000', // Yüksekten açıp indirim yapabilmen için
-                downPayment: '0', // Varsayılanı 0 yaptık, peşinat yok
                 priceMonthly: '3.000',
                 startDate: new Date().toISOString().split('T')[0],
                 paymentDay: '1',
@@ -361,18 +360,13 @@
                 return `${parts[2]}.${parts[1]}.${parts[0]}`; 
             };
 
-            // Peşinat durumuna göre metin
-            const paymentText = formData.downPayment && formData.downPayment !== '0'
-                ? `- Alınan Peşinat: ${formData.downPayment} TL (TAHSİL EDİLDİ)`
-                : `- Peşinat: Yoktur. Kurulum bedeli deneme süreci sonunda (Memnuniyet sağlanırsa) tahsil edilir.`;
-
             const contractText = `
 HİZMET SÖZLEŞMESİ VE GİZLİLİK TAAHHÜTNAMESİ
 
 1. TARAFLAR
 Hizmet Veren: Mehmet Nurullah Tek (GAIA AI Automation)
-Müşteri: ${formData.companyName || '...'} - Yetkili: ${formData.clientName || '...'}
-Adres: ${formData.address || '...'}
+Müşteri: ${formData.companyName || '...................................................'} - Yetkili: ${formData.clientName || '...........................................'}
+Adres: ${formData.address || '...........................................................................................................'}
 
 2. KONU
 Müşterinin Instagram hesabı üzerine Yapay Zeka destekli otomasyon sisteminin kurulması.
@@ -389,9 +383,8 @@ Müşterinin Instagram hesabı üzerine Yapay Zeka destekli otomasyon sisteminin
 - Müşteri, 7. günün sonunda hizmetten memnun kalmazsa sözleşmeyi tek taraflı feshedebilir. Bu durumda kurulum veya hizmet bedeli ödemez.
 
 5. ÜCRETLENDİRME VE ÖDEME (Deneme Süreci Başarılı Olursa)
-- Kurulum Hizmet Bedeli: ${formData.priceSetup} TL + KDV (Deneme süresi bitiminde fatura edilir)
-${paymentText}
-- Aylık Bakım ve Servis Bedeli: ${formData.priceMonthly} TL + KDV (2. aydan itibaren başlar)
+- Kurulum Hizmet Bedeli: ${formData.priceSetup} TL + KDV (Deneme süreci bitiminde, memnuniyet sağlanırsa tahsil edilir)
+- Aylık Bakım ve Servis Bedeli: ${formData.priceMonthly} TL + KDV
 - Ödeme Periyodu: Aylık bakım bedeli, her ayın ${formData.paymentDay}. günü ödenir.
 * 3. Parti yazılım altyapı giderleri (Manychat, OpenAI vb.) hizmet bedeline dahil değildir.
 
@@ -419,10 +412,10 @@ Hizmet Veren (İmza)                              Müşteri (İmza)
 
                         <div className="space-y-4 mb-8 no-print">
                             <div className="grid md:grid-cols-2 gap-4">
-                                <InputGroup label="Müşteri Yetkili Adı" value={formData.clientName} onChange={(v) => setFormData({...formData, clientName: v})} />
-                                <InputGroup label="İşletme Adı" value={formData.companyName} onChange={(v) => setFormData({...formData, companyName: v})} />
+                                <InputGroup label="Müşteri Yetkili Adı" value={formData.clientName} onChange={(v) => setFormData({...formData, clientName: v})} placeholder="Boş bırakırsan noktalı çıkar" />
+                                <InputGroup label="İşletme Adı" value={formData.companyName} onChange={(v) => setFormData({...formData, companyName: v})} placeholder="Boş bırakırsan noktalı çıkar" />
                             </div>
-                            <InputGroup label="Adres" value={formData.address} onChange={(v) => setFormData({...formData, address: v})} />
+                            <InputGroup label="Adres" value={formData.address} onChange={(v) => setFormData({...formData, address: v})} placeholder="Boş bırakırsan noktalı çıkar" />
                             
                             <div className="space-y-1">
                                 <label className="text-xs font-medium text-slate-500 uppercase tracking-wider">Raporlama Tercihi</label>
@@ -447,17 +440,6 @@ Hizmet Veren (İmza)                              Müşteri (İmza)
                                 <InputGroup label="Ödeme Günü" type="number" value={formData.paymentDay} onChange={(v) => setFormData({...formData, paymentDay: v})} />
                                 <InputGroup label="Kurulum Bedeli" value={formData.priceSetup} onChange={(v) => setFormData({...formData, priceSetup: v})} />
                                 <InputGroup label="Aylık Bedel" value={formData.priceMonthly} onChange={(v) => setFormData({...formData, priceMonthly: v})} />
-                            </div>
-
-                             {/* Peşinat Alanı - Esnek */}
-                             <div className="bg-slate-800/50 border border-slate-700 p-4 rounded-xl">
-                                <InputGroup 
-                                    label="PEŞİNAT (Opsiyonel)" 
-                                    value={formData.downPayment} 
-                                    onChange={(v) => setFormData({...formData, downPayment: v})} 
-                                    placeholder="0"
-                                />
-                                <p className="text-xs text-slate-400 mt-1">* 0 yazarsan 'Peşinat yoktur' ibaresi eklenir.</p>
                             </div>
                         </div>
 
