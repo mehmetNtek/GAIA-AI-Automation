@@ -329,10 +329,10 @@
                 clientName: '',
                 companyName: '',
                 address: '',
-                priceSetup: '10.000', // Yüksekten açıp indirim yapabilmen için
-                priceMonthly: '3.000',
-                startDate: new Date().toISOString().split('T')[0],
-                paymentDay: '1',
+                priceSetup: '', 
+                priceMonthly: '',
+                startDate: '',
+                paymentDay: '',
                 reportMethod: 'E-Posta' 
             });
 
@@ -383,16 +383,16 @@ Müşterinin Instagram hesabı üzerine Yapay Zeka destekli otomasyon sisteminin
 - Müşteri, 7. günün sonunda hizmetten memnun kalmazsa sözleşmeyi tek taraflı feshedebilir. Bu durumda kurulum veya hizmet bedeli ödemez.
 
 5. ÜCRETLENDİRME VE ÖDEME (Deneme Süreci Başarılı Olursa)
-- Kurulum Hizmet Bedeli: ${formData.priceSetup} TL + KDV (Deneme süreci bitiminde, memnuniyet sağlanırsa tahsil edilir)
-- Aylık Bakım ve Servis Bedeli: ${formData.priceMonthly} TL + KDV
-- Ödeme Periyodu: Aylık bakım bedeli, her ayın ${formData.paymentDay}. günü ödenir.
+- Kurulum Hizmet Bedeli: ${formData.priceSetup || '....................'} TL + KDV (Deneme süreci bitiminde, memnuniyet sağlanırsa tahsil edilir)
+- Aylık Bakım ve Servis Bedeli: ${formData.priceMonthly || '....................'} TL + KDV
+- Ödeme Periyodu: Aylık bakım bedeli, her ayın ${formData.paymentDay || '.......'}. günü ödenir.
 * 3. Parti yazılım altyapı giderleri (Manychat, OpenAI vb.) hizmet bedeline dahil değildir.
 
 6. GİZLİLİK VE GÜVENLİK
 - Hizmet veren, müşterinin şifrelerini (varsa) ve ticari sırlarını 3. şahıslarla paylaşmayacağını taahhüt eder.
 - Müşteri dilediği zaman hizmeti sonlandırma hakkına sahiptir. Hesapların mülkiyeti Müşteri'ye aittir.
 
-Tarih: ${formatDate(formData.startDate)}
+Tarih: ${formData.startDate ? formatDate(formData.startDate) : '..........................'}
 
 Hizmet Veren (İmza)                              Müşteri (İmza)
             `;
@@ -437,9 +437,9 @@ Hizmet Veren (İmza)                              Müşteri (İmza)
 
                             <div className="grid md:grid-cols-4 gap-4">
                                 <InputGroup label="Tarih" type="date" value={formData.startDate} onChange={(v) => setFormData({...formData, startDate: v})} />
-                                <InputGroup label="Ödeme Günü" type="number" value={formData.paymentDay} onChange={(v) => setFormData({...formData, paymentDay: v})} />
-                                <InputGroup label="Kurulum Bedeli" value={formData.priceSetup} onChange={(v) => setFormData({...formData, priceSetup: v})} />
-                                <InputGroup label="Aylık Bedel" value={formData.priceMonthly} onChange={(v) => setFormData({...formData, priceMonthly: v})} />
+                                <InputGroup label="Ödeme Günü" type="number" value={formData.paymentDay} onChange={(v) => setFormData({...formData, paymentDay: v})} placeholder="Örn: 1" />
+                                <InputGroup label="Kurulum Bedeli" value={formData.priceSetup} onChange={(v) => setFormData({...formData, priceSetup: v})} placeholder="Örn: 10.000" />
+                                <InputGroup label="Aylık Bedel" value={formData.priceMonthly} onChange={(v) => setFormData({...formData, priceMonthly: v})} placeholder="Örn: 3.000" />
                             </div>
                         </div>
 
@@ -479,9 +479,6 @@ Hizmet Veren (İmza)                              Müşteri (İmza)
                                         <h2 className="text-xl font-bold">HİZMET SÖZLEŞMESİ</h2>
                                     </div>
                                     <pre className="contract-text">{contractText}</pre>
-                                    <div className="mt-10 text-center text-sm text-gray-500">
-                                        www.gaia-ai.com.tr | Mehmet Nurullah Tek
-                                    </div>
                                 </div>
                             </div>
                         )}
