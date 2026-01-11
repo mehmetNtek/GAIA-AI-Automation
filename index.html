@@ -328,11 +328,11 @@
             const [formData, setFormData] = useState({
                 clientName: '',
                 companyName: '',
+                taxId: '',
                 address: '',
                 priceSetup: '', 
                 priceMonthly: '',
                 startDate: '',
-                paymentDay: '',
                 reportMethod: 'E-Posta' 
             });
 
@@ -365,7 +365,9 @@ HİZMET SÖZLEŞMESİ VE GİZLİLİK TAAHHÜTNAMESİ
 
 1. TARAFLAR
 Hizmet Veren: Mehmet Nurullah Tek (GAIA AI Automation)
-Müşteri: ${formData.companyName || '...................................................'} - Yetkili: ${formData.clientName || '...........................................'}
+Müşteri: ${formData.companyName || '...................................................'}
+Yetkili: ${formData.clientName || '...........................................'}
+T.C. / Vergi No: ${formData.taxId || '...........................................'}
 Adres: ${formData.address || '...........................................................................................................'}
 
 2. KONU
@@ -385,7 +387,8 @@ Müşterinin Instagram hesabı üzerine Yapay Zeka destekli otomasyon sisteminin
 5. ÜCRETLENDİRME VE ÖDEME (Deneme Süreci Başarılı Olursa)
 - Kurulum Hizmet Bedeli: ${formData.priceSetup || '....................'} TL + KDV (Deneme süreci bitiminde, memnuniyet sağlanırsa tahsil edilir)
 - Aylık Bakım ve Servis Bedeli: ${formData.priceMonthly || '....................'} TL + KDV
-- Ödeme Periyodu: Aylık bakım bedeli, her ayın ${formData.paymentDay || '.......'}. günü ödenir.
+- Ödeme Periyodu: Aylık bakım bedeli, her ayın 5. günü ödenir.
+* Ödemeler, Hizmet Veren tarafından kesilecek e-Arşiv Fatura karşılığında yapılacaktır.
 * 3. Parti yazılım altyapı giderleri (Manychat, OpenAI vb.) hizmet bedeline dahil değildir.
 
 6. GİZLİLİK VE GÜVENLİK
@@ -412,10 +415,13 @@ Hizmet Veren (İmza)                              Müşteri (İmza)
 
                         <div className="space-y-4 mb-8 no-print">
                             <div className="grid md:grid-cols-2 gap-4">
-                                <InputGroup label="Müşteri Yetkili Adı" value={formData.clientName} onChange={(v) => setFormData({...formData, clientName: v})} placeholder="Boş bırakırsan noktalı çıkar" />
                                 <InputGroup label="İşletme Adı" value={formData.companyName} onChange={(v) => setFormData({...formData, companyName: v})} placeholder="Boş bırakırsan noktalı çıkar" />
+                                <InputGroup label="Müşteri Yetkili Adı" value={formData.clientName} onChange={(v) => setFormData({...formData, clientName: v})} placeholder="Boş bırakırsan noktalı çıkar" />
                             </div>
-                            <InputGroup label="Adres" value={formData.address} onChange={(v) => setFormData({...formData, address: v})} placeholder="Boş bırakırsan noktalı çıkar" />
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <InputGroup label="T.C. / Vergi No" value={formData.taxId} onChange={(v) => setFormData({...formData, taxId: v})} placeholder="Şahıs ise T.C., Şirket ise Vergi No" />
+                                <InputGroup label="Adres" value={formData.address} onChange={(v) => setFormData({...formData, address: v})} placeholder="Boş bırakırsan noktalı çıkar" />
+                            </div>
                             
                             <div className="space-y-1">
                                 <label className="text-xs font-medium text-slate-500 uppercase tracking-wider">Raporlama Tercihi</label>
@@ -435,9 +441,8 @@ Hizmet Veren (İmza)                              Müşteri (İmza)
                                 </div>
                             </div>
 
-                            <div className="grid md:grid-cols-4 gap-4">
+                            <div className="grid md:grid-cols-3 gap-4">
                                 <InputGroup label="Tarih" type="date" value={formData.startDate} onChange={(v) => setFormData({...formData, startDate: v})} />
-                                <InputGroup label="Ödeme Günü" type="number" value={formData.paymentDay} onChange={(v) => setFormData({...formData, paymentDay: v})} placeholder="Örn: 1" />
                                 <InputGroup label="Kurulum Bedeli" value={formData.priceSetup} onChange={(v) => setFormData({...formData, priceSetup: v})} placeholder="Örn: 10.000" />
                                 <InputGroup label="Aylık Bedel" value={formData.priceMonthly} onChange={(v) => setFormData({...formData, priceMonthly: v})} placeholder="Örn: 3.000" />
                             </div>
