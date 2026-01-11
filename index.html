@@ -71,8 +71,8 @@
 
             .contract-text {
                 font-family: 'Times New Roman', serif;
-                font-size: 12pt;
-                line-height: 1.5;
+                font-size: 11pt;
+                line-height: 1.4;
                 white-space: pre-wrap;
                 color: black !important;
             }
@@ -92,7 +92,7 @@
         
         // DİKKAT: Aşağıdaki linki kendi Instagram adresinle değiştir.
         // Örnek: "https://www.instagram.com/gaia.ai.tr/"
-        const INSTAGRAM_LINK = "https://www.instagram.com/gaia.ai.automation/"; 
+        const INSTAGRAM_LINK = "https://www.instagram.com/KULLANICI_ADINI_BURAYA_YAZ/"; 
         
         // GÜVENLİK GÜNCELLEMESİ: 
         // Şifre: "elam"
@@ -329,7 +329,8 @@
                 clientName: '',
                 companyName: '',
                 address: '',
-                priceSetup: '15.000', 
+                priceSetup: '10.000', // Yüksekten açıp indirim yapabilmen için
+                downPayment: '0', // Varsayılanı 0 yaptık, peşinat yok
                 priceMonthly: '3.000',
                 startDate: new Date().toISOString().split('T')[0],
                 paymentDay: '1',
@@ -337,18 +338,15 @@
             });
 
             const [generated, setGenerated] = useState(false);
-            const contractRef = useRef(null); // Otomatik kaydırma için referans
+            const contractRef = useRef(null); 
 
-            // Sözleşmeyi hazırlama ve kaydırma fonksiyonu
             const handleGenerate = () => {
                 setGenerated(true);
-                // State güncellendikten hemen sonra aşağı kaydır
                 setTimeout(() => {
                     contractRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }, 100);
             };
 
-            // Yazdırma fonksiyonu
             const handlePrint = () => {
                 if (!generated) {
                     alert("Lütfen önce 'Sözleşmeyi Hazırla' butonuna basın.");
@@ -357,12 +355,16 @@
                 window.print();
             };
 
-            // Tarih formatlama fonksiyonu (YYYY-MM-DD -> DD.MM.YYYY)
             const formatDate = (dateString) => {
                 if (!dateString) return '';
-                const parts = dateString.split('-'); // [2026, 01, 09]
-                return `${parts[2]}.${parts[1]}.${parts[0]}`; // 09.01.2026
+                const parts = dateString.split('-'); 
+                return `${parts[2]}.${parts[1]}.${parts[0]}`; 
             };
+
+            // Peşinat durumuna göre metin
+            const paymentText = formData.downPayment && formData.downPayment !== '0'
+                ? `- Alınan Peşinat: ${formData.downPayment} TL (TAHSİL EDİLDİ)`
+                : `- Peşinat: Yoktur. Kurulum bedeli deneme süreci sonunda (Memnuniyet sağlanırsa) tahsil edilir.`;
 
             const contractText = `
 HİZMET SÖZLEŞMESİ VE GİZLİLİK TAAHHÜTNAMESİ
@@ -381,20 +383,21 @@ Müşterinin Instagram hesabı üzerine Yapay Zeka destekli otomasyon sisteminin
 - İnsan Müdahalesi Gerektiren Durumların Bildirilmesi (E-Posta ile).
 - ${formData.reportMethod} üzerinden Günlük Veri ve Satış Raporlaması.
 
-4. 7 GÜNLÜK ÜCRETSİZ DENEME
-- Müşteri, sistemi 7 gün boyunca hiçbir ücret ödemeden test edecektir.
-- Deneme süreci sonunda memnuniyet sağlanmazsa sistem iptal edilir, ücret talep edilmez.
+4. 7 GÜNLÜK MEMNUNİYET GARANTİSİ (Deneme Süreci)
+- İşbu sözleşme imzalandığı tarihte kurulum başlar ve 7 günlük "Ücretsiz Deneme" süreci aktif olur.
+- Deneme süresi boyunca müşteriden herhangi bir ücret talep edilmez.
+- Müşteri, 7. günün sonunda hizmetten memnun kalmazsa sözleşmeyi tek taraflı feshedebilir. Bu durumda kurulum veya hizmet bedeli ödemez.
 
-5. ÜCRETLENDİRME VE ÖDEME (Deneme Sonrası Onay Halinde)
-- Kurulum Hizmet Bedeli: ${formData.priceSetup} TL + KDV (Tek Seferlik)
-- Aylık Bakım ve Servis Bedeli: ${formData.priceMonthly} TL + KDV
-- Ödeme Periyodu: Aylık bakım bedeli, her ayın ${formData.paymentDay}. günü fatura karşılığı peşin olarak ödenir.
-* 3. Parti yazılım altyapı giderleri (Manychat, OpenAI vb.) hizmet bedeline dahil değildir, doğrudan sağlayıcıya (uygulama içine) ödenir.
+5. ÜCRETLENDİRME VE ÖDEME (Deneme Süreci Başarılı Olursa)
+- Kurulum Hizmet Bedeli: ${formData.priceSetup} TL + KDV (Deneme süresi bitiminde fatura edilir)
+${paymentText}
+- Aylık Bakım ve Servis Bedeli: ${formData.priceMonthly} TL + KDV (2. aydan itibaren başlar)
+- Ödeme Periyodu: Aylık bakım bedeli, her ayın ${formData.paymentDay}. günü ödenir.
+* 3. Parti yazılım altyapı giderleri (Manychat, OpenAI vb.) hizmet bedeline dahil değildir.
 
 6. GİZLİLİK VE GÜVENLİK
-- Hizmet veren, müşterinin şifrelerini (varsa) ve ticari sırlarını 3. şahıslarla paylaşmayacağını,
-- Verileri sadece otomasyonun çalışması amacıyla kullanacağını taahhüt eder.
-- Müşteri dilediği zaman hizmeti sonlandırma hakkına sahiptir.
+- Hizmet veren, müşterinin şifrelerini (varsa) ve ticari sırlarını 3. şahıslarla paylaşmayacağını taahhüt eder.
+- Müşteri dilediği zaman hizmeti sonlandırma hakkına sahiptir. Hesapların mülkiyeti Müşteri'ye aittir.
 
 Tarih: ${formatDate(formData.startDate)}
 
@@ -410,7 +413,7 @@ Hizmet Veren (İmza)                              Müşteri (İmza)
                                     <i data-lucide="shield-check" className="text-emerald-500"></i>
                                     Yönetici Paneli: Sözleşme
                                 </h2>
-                                <p className="text-slate-400 text-sm mt-1">Müşteri bilgilerini girerek sözleşmeyi hazırla.</p>
+                                <p className="text-slate-400 text-sm mt-1">Sözleşmeyi müşterinin yanında doldur.</p>
                             </div>
                         </div>
 
@@ -421,7 +424,6 @@ Hizmet Veren (İmza)                              Müşteri (İmza)
                             </div>
                             <InputGroup label="Adres" value={formData.address} onChange={(v) => setFormData({...formData, address: v})} />
                             
-                            {/* Raporlama Tercihi */}
                             <div className="space-y-1">
                                 <label className="text-xs font-medium text-slate-500 uppercase tracking-wider">Raporlama Tercihi</label>
                                 <div className="grid grid-cols-2 gap-4">
@@ -442,9 +444,20 @@ Hizmet Veren (İmza)                              Müşteri (İmza)
 
                             <div className="grid md:grid-cols-4 gap-4">
                                 <InputGroup label="Tarih" type="date" value={formData.startDate} onChange={(v) => setFormData({...formData, startDate: v})} />
-                                <InputGroup label="Ödeme Günü (Ayın)" type="number" value={formData.paymentDay} onChange={(v) => setFormData({...formData, paymentDay: v})} />
-                                <InputGroup label="Kurulum (TL + KDV)" value={formData.priceSetup} onChange={(v) => setFormData({...formData, priceSetup: v})} />
-                                <InputGroup label="Aylık (TL + KDV)" value={formData.priceMonthly} onChange={(v) => setFormData({...formData, priceMonthly: v})} />
+                                <InputGroup label="Ödeme Günü" type="number" value={formData.paymentDay} onChange={(v) => setFormData({...formData, paymentDay: v})} />
+                                <InputGroup label="Kurulum Bedeli" value={formData.priceSetup} onChange={(v) => setFormData({...formData, priceSetup: v})} />
+                                <InputGroup label="Aylık Bedel" value={formData.priceMonthly} onChange={(v) => setFormData({...formData, priceMonthly: v})} />
+                            </div>
+
+                             {/* Peşinat Alanı - Esnek */}
+                             <div className="bg-slate-800/50 border border-slate-700 p-4 rounded-xl">
+                                <InputGroup 
+                                    label="PEŞİNAT (Opsiyonel)" 
+                                    value={formData.downPayment} 
+                                    onChange={(v) => setFormData({...formData, downPayment: v})} 
+                                    placeholder="0"
+                                />
+                                <p className="text-xs text-slate-400 mt-1">* 0 yazarsan 'Peşinat yoktur' ibaresi eklenir.</p>
                             </div>
                         </div>
 
