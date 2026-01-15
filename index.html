@@ -140,7 +140,7 @@
 
                     {/* Content Switcher */}
                     <main>
-                        {view === 'landing' ? <LandingPage onDemoClick={() => window.open(INSTAGRAM_LINK, '_blank')} /> : <ContractGenerator />}
+                        {view === 'landing' ? <LandingPage onDemoClick={() => window.open(INSTAGRAM_LINK, '_blank')} /> : <AdminPanel />}
                     </main>
 
                     {/* Footer */}
@@ -182,7 +182,6 @@
             const [error, setError] = useState(false);
             const [loading, setLoading] = useState(false);
 
-            // Basit Hash Fonksiyonu
             const simpleHash = (str) => {
                 let hash = 0;
                 if (str.length === 0) return hash.toString();
@@ -197,10 +196,7 @@
             const handleSubmit = (e) => {
                 e.preventDefault();
                 setLoading(true);
-                
-                // "elam" kelimesinin simpleHash çıktısı "3115795"tir.
                 const inputHash = simpleHash(pass);
-                
                 if (inputHash === ADMIN_HASH) {
                     setLoading(false);
                     onLogin();
@@ -324,7 +320,104 @@
             );
         }
 
-        function ContractGenerator() {
+        // --- YENİ ADMİN PANEL YAPISI ---
+        function AdminPanel() {
+            const [activeTab, setActiveTab] = useState('contract'); // 'contract' | 'script'
+
+            useEffect(() => {
+                if (window.lucide) window.lucide.createIcons();
+            }, [activeTab]);
+
+            return (
+                <div className="py-10 px-4 max-w-3xl mx-auto animate-in zoom-in-95 duration-300 contract-wrapper">
+                    {/* Sekme Butonları */}
+                    <div className="flex gap-2 mb-6 no-print">
+                        <button 
+                            onClick={() => setActiveTab('contract')}
+                            className={`flex-1 py-3 px-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'contract' ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-900 text-slate-400 hover:bg-slate-800 border border-slate-800'}`}
+                        >
+                            <i data-lucide="file-text" className="w-4 h-4"></i> Sözleşme
+                        </button>
+                        <button 
+                            onClick={() => setActiveTab('script')}
+                            className={`flex-1 py-3 px-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'script' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'bg-slate-900 text-slate-400 hover:bg-slate-800 border border-slate-800'}`}
+                        >
+                            <i data-lucide="message-square" className="w-4 h-4"></i> Satış Senaryosu
+                        </button>
+                    </div>
+
+                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl contract-paper">
+                        {activeTab === 'contract' ? <ContractForm /> : <SalesScript />}
+                    </div>
+                </div>
+            );
+        }
+
+        function SalesScript() {
+            return (
+                <div className="space-y-8 animate-in fade-in duration-300 text-white">
+                    <div className="border-b border-slate-800 pb-4">
+                        <h2 className="text-2xl font-bold flex items-center gap-2">
+                            <i data-lucide="zap" className="text-yellow-400 fill-yellow-400"></i>
+                            Sahne Arkası: Satış Rehberi
+                        </h2>
+                        <p className="text-slate-400 text-sm mt-1">Mehmet, bu senin kopya kağıdın. İçeri girmeden önce oku, derin nefes al.</p>
+                    </div>
+
+                    <div className="space-y-6">
+                        <ScriptStep 
+                            number="1" 
+                            title="Buz Kırıcı Giriş (Gerilme Yok)" 
+                            content="Merhaba kolay gelsin. Sizi alışveriş yaparmış gibi rahatsız etmeyeyim. Ben Gaziantep'te yazılım okuyorum. İşletmeler için geliştirdiğim bir yapay zeka sistemi var, sadece fikrinizi almak için 2 dakikanızı rica edebilir miyim? Bir şey satmaya çalışmıyorum, gerçekten geri bildirim topluyorum."
+                            note="Not: 'Öğrenciyim' ve 'Fikir almak istiyorum' demek gardlarını düşürür."
+                        />
+
+                        <ScriptStep 
+                            number="2" 
+                            title="Kancayı At (Sorun Tespiti)" 
+                            content="Şunu çok merak ediyorum: İşleriniz yoğun olduğunda veya dükkan kapalıyken Instagram'dan gelen mesajlara anında dönebiliyor musunuz? Yoksa bazen gözden kaçan müşteriler oluyor mu?"
+                            note="Eğer 'Evet kaçıyor' derlerse yakaladın. 'Hayır, hepsine dönüyoruz' derlerse: 'Süper, peki gece 3'te yazana da anında cevap verip randevu alabiliyor musunuz?' de."
+                        />
+
+                        <ScriptStep 
+                            number="3" 
+                            title="Sihirli Çözüm (Senin Sistemin)" 
+                            content="Ben şöyle bir sistem kurdum: Siz uyurken bile biri 'Fiyat ne kadar?' veya 'Randevu almak istiyorum' dediğinde, Yapay Zeka sanki sizmişsiniz gibi konuşuyor, sorularını cevaplıyor ve randevuyu alıp size haber veriyor. Yani aslında bedavaya çalışan, hiç uyumayan bir sekreteriniz oluyor."
+                        />
+
+                        <ScriptStep 
+                            number="4" 
+                            title="Reddedilemez Teklif (Kapanış)" 
+                            content="Şöyle yapalım, ben size bunu 1 hafta boyunca ÜCRETSİZ kurayım. Para istemiyorum. Eğer 1 hafta içinde size fazladan müşteri kazandırmazsa sistemi kapatırız, birbirimize teşekkür ederiz. Ama kazandırırsa, o zaman oturur konuşuruz. Kaybedecek hiçbir şeyiniz yok. Deneyelim mi?"
+                        />
+
+                        <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700 mt-6">
+                            <h4 className="font-bold text-red-400 mb-2 flex items-center gap-2"><i data-lucide="shield-alert" className="w-4 h-4"></i> Zor Sorulara Cevaplar</h4>
+                            <ul className="text-sm space-y-3 text-slate-300">
+                                <li><strong>'Ne kadar ücreti?'</strong> -> 'Abi önce bir deneyelim, işine yararsa ayda bir personel yemeği parasına (3-5 bin TL) hallederiz. Önemli olan senin işine yaraması.'</li>
+                                <li><strong>'Bizim eleman bakıyor.'</strong> -> 'Süper, ama eleman pazar günü izinli, gece uyuyor. Bu sistem elemana yardımcı oluyor, onun yükünü alıyor.'</li>
+                                <li><strong>'Ben anlamam teknolojiden.'</strong> -> 'Siz hiçbir şeye dokunmuyorsunuz. Her şeyi ben ayarlıyorum. Siz sadece telefonunuza gelen 'Yeni Sipariş' bildirimine bakıyorsunuz.'</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function ScriptStep({ number, title, content, note }) {
+            return (
+                <div className="relative pl-6 border-l-2 border-slate-700">
+                    <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-800 border-2 border-emerald-500"></div>
+                    <h3 className="text-lg font-bold text-emerald-400 mb-2">{number}. {title}</h3>
+                    <p className="text-white text-lg leading-relaxed bg-slate-950/50 p-3 rounded-lg border border-slate-800/50">
+                        "{content}"
+                    </p>
+                    {note && <p className="text-slate-500 text-sm mt-2 italic">{note}</p>}
+                </div>
+            );
+        }
+
+        function ContractForm() {
             const [formData, setFormData] = useState({
                 clientName: '',
                 companyName: '',
@@ -401,93 +494,91 @@ Hizmet Veren (İmza)                              Müşteri (İmza)
             `;
 
             return (
-                <div className="py-10 px-4 max-w-3xl mx-auto animate-in zoom-in-95 duration-300 contract-wrapper">
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl contract-paper">
-                        <div className="mb-8 border-b border-slate-800 pb-6 flex justify-between items-center no-print">
-                            <div>
-                                <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                                    <i data-lucide="shield-check" className="text-emerald-500"></i>
-                                    Yönetici Paneli: Sözleşme
-                                </h2>
-                                <p className="text-slate-400 text-sm mt-1">Sözleşmeyi müşterinin yanında doldur.</p>
-                            </div>
+                <div className="animate-in fade-in duration-300">
+                    <div className="mb-8 border-b border-slate-800 pb-6 flex justify-between items-center no-print">
+                        <div>
+                            <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                                <i data-lucide="shield-check" className="text-emerald-500"></i>
+                                Sözleşme Oluşturucu
+                            </h2>
+                            <p className="text-slate-400 text-sm mt-1">Sözleşmeyi müşterinin yanında doldur.</p>
                         </div>
+                    </div>
 
-                        <div className="space-y-4 mb-8 no-print">
-                            <div className="grid md:grid-cols-2 gap-4">
-                                <InputGroup label="İşletme Adı" value={formData.companyName} onChange={(v) => setFormData({...formData, companyName: v})} placeholder="Boş bırakırsan noktalı çıkar" />
-                                <InputGroup label="Müşteri Yetkili Adı" value={formData.clientName} onChange={(v) => setFormData({...formData, clientName: v})} placeholder="Boş bırakırsan noktalı çıkar" />
-                            </div>
-                            <div className="grid md:grid-cols-2 gap-4">
-                                <InputGroup label="T.C. / Vergi No" value={formData.taxId} onChange={(v) => setFormData({...formData, taxId: v})} placeholder="Şahıs ise T.C., Şirket ise Vergi No" />
-                                <InputGroup label="Adres" value={formData.address} onChange={(v) => setFormData({...formData, address: v})} placeholder="Boş bırakırsan noktalı çıkar" />
-                            </div>
-                            
-                            <div className="space-y-1">
-                                <label className="text-xs font-medium text-slate-500 uppercase tracking-wider">Raporlama Tercihi</label>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <button 
-                                        onClick={() => setFormData({...formData, reportMethod: 'E-Posta'})}
-                                        className={`px-3 py-2 rounded-lg text-sm border ${formData.reportMethod === 'E-Posta' ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400' : 'bg-slate-950 border-slate-800 text-slate-400'}`}
-                                    >
-                                        E-Posta (Ücretsiz)
-                                    </button>
-                                    <button 
-                                        onClick={() => setFormData({...formData, reportMethod: 'Telegram'})}
-                                        className={`px-3 py-2 rounded-lg text-sm border ${formData.reportMethod === 'Telegram' ? 'bg-blue-500/20 border-blue-500 text-blue-400' : 'bg-slate-950 border-slate-800 text-slate-400'}`}
-                                    >
-                                        Telegram (Ücretsiz)
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className="grid md:grid-cols-3 gap-4">
-                                <InputGroup label="Tarih" type="date" value={formData.startDate} onChange={(v) => setFormData({...formData, startDate: v})} />
-                                <InputGroup label="Kurulum Bedeli" value={formData.priceSetup} onChange={(v) => setFormData({...formData, priceSetup: v})} placeholder="Örn: 10.000" />
-                                <InputGroup label="Aylık Bedel" value={formData.priceMonthly} onChange={(v) => setFormData({...formData, priceMonthly: v})} placeholder="Örn: 3.000" />
-                            </div>
+                    <div className="space-y-4 mb-8 no-print">
+                        <div className="grid md:grid-cols-2 gap-4">
+                            <InputGroup label="İşletme Adı" value={formData.companyName} onChange={(v) => setFormData({...formData, companyName: v})} placeholder="Boş bırakırsan noktalı çıkar" />
+                            <InputGroup label="Müşteri Yetkili Adı" value={formData.clientName} onChange={(v) => setFormData({...formData, clientName: v})} placeholder="Boş bırakırsan noktalı çıkar" />
                         </div>
-
-                        <div className="flex gap-4 no-print">
-                            <button 
-                                onClick={handleGenerate}
-                                className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
-                            >
-                                <i data-lucide="file-text" className="w-5 h-5"></i> Sözleşmeyi Hazırla
-                            </button>
-                            
-                            {generated && (
+                        <div className="grid md:grid-cols-2 gap-4">
+                            <InputGroup label="T.C. / Vergi No" value={formData.taxId} onChange={(v) => setFormData({...formData, taxId: v})} placeholder="Şahıs ise T.C., Şirket ise Vergi No" />
+                            <InputGroup label="Adres" value={formData.address} onChange={(v) => setFormData({...formData, address: v})} placeholder="Boş bırakırsan noktalı çıkar" />
+                        </div>
+                        
+                        <div className="space-y-1">
+                            <label className="text-xs font-medium text-slate-500 uppercase tracking-wider">Raporlama Tercihi</label>
+                            <div className="grid grid-cols-2 gap-4">
                                 <button 
-                                    onClick={handlePrint}
-                                    className="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2 animate-in fade-in"
+                                    onClick={() => setFormData({...formData, reportMethod: 'E-Posta'})}
+                                    className={`px-3 py-2 rounded-lg text-sm border ${formData.reportMethod === 'E-Posta' ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400' : 'bg-slate-950 border-slate-800 text-slate-400'}`}
                                 >
-                                    <i data-lucide="printer" className="w-5 h-5"></i> Yazdır
+                                    E-Posta (Ücretsiz)
                                 </button>
-                            )}
+                                <button 
+                                    onClick={() => setFormData({...formData, reportMethod: 'Telegram'})}
+                                    className={`px-3 py-2 rounded-lg text-sm border ${formData.reportMethod === 'Telegram' ? 'bg-blue-500/20 border-blue-500 text-blue-400' : 'bg-slate-950 border-slate-800 text-slate-400'}`}
+                                >
+                                    Telegram (Ücretsiz)
+                                </button>
+                            </div>
                         </div>
 
+                        <div className="grid md:grid-cols-3 gap-4">
+                            <InputGroup label="Tarih" type="date" value={formData.startDate} onChange={(v) => setFormData({...formData, startDate: v})} />
+                            <InputGroup label="Kurulum Bedeli" value={formData.priceSetup} onChange={(v) => setFormData({...formData, priceSetup: v})} placeholder="Örn: 10.000" />
+                            <InputGroup label="Aylık Bedel" value={formData.priceMonthly} onChange={(v) => setFormData({...formData, priceMonthly: v})} placeholder="Örn: 3.000" />
+                        </div>
+                    </div>
+
+                    <div className="flex gap-4 no-print">
+                        <button 
+                            onClick={handleGenerate}
+                            className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
+                        >
+                            <i data-lucide="file-text" className="w-5 h-5"></i> Sözleşmeyi Hazırla
+                        </button>
+                        
                         {generated && (
-                            <div ref={contractRef} id="printable-contract" className="mt-6 bg-slate-950 p-6 rounded-xl border border-slate-800 relative group contract-paper">
-                                {/* Ekranda Görünüm (PREVIEW) */}
-                                <div className="no-print">
-                                    <div className="flex items-center gap-2 mb-4 border-b border-slate-800 pb-2">
-                                        <i data-lucide="eye" className="w-4 h-4 text-emerald-500"></i>
-                                        <span className="text-sm font-bold text-slate-400">Önizleme</span>
-                                    </div>
-                                    <pre className="font-mono text-xs md:text-sm text-slate-300 whitespace-pre-wrap">{contractText}</pre>
-                                </div>
-                                
-                                {/* Yazıcıda Görünüm (PRINT ONLY) */}
-                                <div className="print-only">
-                                    <div className="text-center mb-8">
-                                        <h1 className="text-2xl font-bold border-b-2 border-black pb-2 mb-2">GAIA AI AUTOMATION</h1>
-                                        <h2 className="text-xl font-bold">HİZMET SÖZLEŞMESİ</h2>
-                                    </div>
-                                    <pre className="contract-text">{contractText}</pre>
-                                </div>
-                            </div>
+                            <button 
+                                onClick={handlePrint}
+                                className="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2 animate-in fade-in"
+                            >
+                                <i data-lucide="printer" className="w-5 h-5"></i> Yazdır
+                            </button>
                         )}
                     </div>
+
+                    {generated && (
+                        <div ref={contractRef} id="printable-contract" className="mt-6 bg-slate-950 p-6 rounded-xl border border-slate-800 relative group contract-paper">
+                            {/* Ekranda Görünüm (PREVIEW) */}
+                            <div className="no-print">
+                                <div className="flex items-center gap-2 mb-4 border-b border-slate-800 pb-2">
+                                    <i data-lucide="eye" className="w-4 h-4 text-emerald-500"></i>
+                                    <span className="text-sm font-bold text-slate-400">Önizleme</span>
+                                </div>
+                                <pre className="font-mono text-xs md:text-sm text-slate-300 whitespace-pre-wrap">{contractText}</pre>
+                            </div>
+                            
+                            {/* Yazıcıda Görünüm (PRINT ONLY) */}
+                            <div className="print-only">
+                                <div className="text-center mb-8">
+                                    <h1 className="text-2xl font-bold border-b-2 border-black pb-2 mb-2">GAIA AI AUTOMATION</h1>
+                                    <h2 className="text-xl font-bold">HİZMET SÖZLEŞMESİ</h2>
+                                </div>
+                                <pre className="contract-text">{contractText}</pre>
+                            </div>
+                        </div>
+                    )}
                 </div>
             );
         }
