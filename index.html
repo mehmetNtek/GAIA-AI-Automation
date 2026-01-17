@@ -322,33 +322,125 @@
 
         // --- YENİ ADMİN PANEL YAPISI ---
         function AdminPanel() {
-            const [activeTab, setActiveTab] = useState('contract'); // 'contract' | 'script'
+            const [activeTab, setActiveTab] = useState('contract'); // 'contract' | 'script' | 'outreach'
 
             useEffect(() => {
                 if (window.lucide) window.lucide.createIcons();
             }, [activeTab]);
 
             return (
-                <div className="py-10 px-4 max-w-3xl mx-auto animate-in zoom-in-95 duration-300 contract-wrapper">
+                <div className="py-10 px-4 max-w-4xl mx-auto animate-in zoom-in-95 duration-300 contract-wrapper">
                     {/* Sekme Butonları */}
-                    <div className="flex gap-2 mb-6 no-print">
+                    <div className="grid grid-cols-3 gap-2 mb-6 no-print">
                         <button 
                             onClick={() => setActiveTab('contract')}
-                            className={`flex-1 py-3 px-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'contract' ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-900 text-slate-400 hover:bg-slate-800 border border-slate-800'}`}
+                            className={`py-3 px-2 md:px-4 rounded-xl text-xs md:text-sm font-bold flex flex-col md:flex-row items-center justify-center gap-2 transition-all ${activeTab === 'contract' ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-900 text-slate-400 hover:bg-slate-800 border border-slate-800'}`}
                         >
                             <i data-lucide="file-text" className="w-4 h-4"></i> Sözleşme
                         </button>
                         <button 
                             onClick={() => setActiveTab('script')}
-                            className={`flex-1 py-3 px-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'script' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'bg-slate-900 text-slate-400 hover:bg-slate-800 border border-slate-800'}`}
+                            className={`py-3 px-2 md:px-4 rounded-xl text-xs md:text-sm font-bold flex flex-col md:flex-row items-center justify-center gap-2 transition-all ${activeTab === 'script' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'bg-slate-900 text-slate-400 hover:bg-slate-800 border border-slate-800'}`}
                         >
-                            <i data-lucide="message-square" className="w-4 h-4"></i> Satış Senaryosu
+                            <i data-lucide="message-square" className="w-4 h-4"></i> Yüzyüze Satış
+                        </button>
+                        <button 
+                            onClick={() => setActiveTab('outreach')}
+                            className={`py-3 px-2 md:px-4 rounded-xl text-xs md:text-sm font-bold flex flex-col md:flex-row items-center justify-center gap-2 transition-all ${activeTab === 'outreach' ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/20' : 'bg-slate-900 text-slate-400 hover:bg-slate-800 border border-slate-800'}`}
+                        >
+                            <i data-lucide="instagram" className="w-4 h-4"></i> Instagram DM
                         </button>
                     </div>
 
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl contract-paper">
-                        {activeTab === 'contract' ? <ContractForm /> : <SalesScript />}
+                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 md:p-8 shadow-2xl contract-paper">
+                        {activeTab === 'contract' && <ContractForm />}
+                        {activeTab === 'script' && <SalesScript />}
+                        {activeTab === 'outreach' && <InstagramOutreach />}
                     </div>
+                </div>
+            );
+        }
+
+        function InstagramOutreach() {
+            return (
+                <div className="space-y-8 animate-in fade-in duration-300 text-white">
+                    <div className="border-b border-slate-800 pb-4">
+                        <h2 className="text-2xl font-bold flex items-center gap-2">
+                            <i data-lucide="instagram" className="text-pink-500"></i>
+                            Instagram Operasyonu (Cumartesi Modu)
+                        </h2>
+                        <p className="text-slate-400 text-sm mt-1">Mehmet, bugün hava kapalı ama Instagram açık. Yatağından çıkmadan 5 müşteri bulabilirsin. Hedef: Bugün 10 işletmeye yazmak.</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {/* Sol Kolon: Hedefler */}
+                        <div className="space-y-4">
+                            <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                                <h3 className="font-bold text-emerald-400 mb-2 flex items-center gap-2">
+                                    <i data-lucide="target" className="w-4 h-4"></i>
+                                    Kimi Arıyoruz? (Arama Çubuğu)
+                                </h3>
+                                <ul className="text-sm space-y-2 text-slate-300 list-disc list-inside">
+                                    <li>#gaziantepkuaför</li>
+                                    <li>#gaziantepbutik</li>
+                                    <li>#gaziantepgüzellikmerkezi</li>
+                                    <li>#gazianteppastane</li>
+                                    <li>#gazianteporganizasyon</li>
+                                </ul>
+                                <p className="text-xs text-slate-500 mt-2 italic">*Son gönderilere bak, hikayesi aktif olanlara yaz.</p>
+                            </div>
+
+                            <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                                <h3 className="font-bold text-blue-400 mb-2 flex items-center gap-2">
+                                    <i data-lucide="lightbulb" className="w-4 h-4"></i>
+                                    Taktik: Hikaye Yanıtı (En Etkilisi)
+                                </h3>
+                                <p className="text-sm text-slate-300 mb-2">
+                                    Direkt DM kutusuna düşme, "İstekler" kısmında kaybolursun. Bir hikayelerine (Story) yanıt ver.
+                                </p>
+                                <div className="p-3 bg-slate-900 rounded border border-slate-700 text-sm text-slate-200">
+                                    "Abi/Abla selamlar, bu ürün/hizmet çok iyiymiş 🔥 Bir şey sormak istiyorum, DM'den fiyat soranlara tek tek yetişebiliyor musunuz yoksa arada kaçanlar oluyor mu?"
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Sağ Kolon: Şablonlar */}
+                        <div className="space-y-4">
+                            <h3 className="font-bold text-white mb-2">Kopyala - Yapıştır Şablonlar</h3>
+                            
+                            <ScriptCard 
+                                title="1. Samimi Öğrenci Girişi (Güven Verir)"
+                                content="Merhaba, iyi çalışmalar. Ben Gaziantep'te yazılım öğrencisiyim. Yerel işletmelerimiz için Instagram DM'lerini otomatikleştiren bir sistem yaptım. Sizi de görünce bir fikrinizi almak istedim. Müsait olduğunuzda dönüş yapabilirseniz çok sevinirim 🙏"
+                            />
+
+                            <ScriptCard 
+                                title="2. Direkt Fayda (Kısa ve Net)"
+                                content="Selamlar, sayfanız çok aktif görünüyor tebrikler. Müşterileriniz gece saatlerinde veya siz yoğunken yazdığında otomatik cevap verip randevu oluşturan bir asistanınız olsun ister miydiniz? Gaziantep'teyim, isterseniz detayları anlatabilirim."
+                            />
+
+                            <ScriptCard 
+                                title="3. Ücretsiz Deneme (Risk Yok)"
+                                content="Merhaba, işletmeniz için bir yapay zeka sistemi hazırladım. 1 hafta boyunca ÜCRETSİZ denemenizi istiyorum. Beğenmezseniz kapatırız, ücret talep etmiyorum. Sadece sistemimi test etmek istiyorum. Ne dersiniz?"
+                            />
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function ScriptCard({ title, content }) {
+            return (
+                <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700 hover:border-pink-500/50 transition-colors group">
+                    <div className="flex justify-between items-start mb-2">
+                        <h4 className="font-bold text-pink-300 text-sm">{title}</h4>
+                        <button 
+                            onClick={() => {navigator.clipboard.writeText(content); alert('Kopyalandı!');}}
+                            className="text-xs bg-slate-700 hover:bg-emerald-600 text-white px-2 py-1 rounded transition-colors"
+                        >
+                            Kopyala
+                        </button>
+                    </div>
+                    <p className="text-xs md:text-sm text-slate-300 italic">"{content}"</p>
                 </div>
             );
         }
